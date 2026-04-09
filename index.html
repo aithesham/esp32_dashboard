@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>ESP32 Firebase LED Control</title>
+</head>
+<body>
+
+<h2>ESP32 LED Control (Anywhere)</h2>
+
+<button onclick="turnOn()">ON</button>
+<button onclick="turnOff()">OFF</button>
+
+<p id="status">Status: Unknown</p>
+
+<script>
+const firebaseURL = "https://your-project-id-default-rtdb.firebaseio.com/LED.json";
+
+function turnOn() {
+  fetch(firebaseURL, {
+    method: "PUT",
+    body: "1"
+  });
+}
+
+function turnOff() {
+  fetch(firebaseURL, {
+    method: "PUT",
+    body: "0"
+  });
+}
+
+// Auto update status
+setInterval(() => {
+  fetch(firebaseURL)
+    .then(res => res.json())
+    .then(data => {
+      document.getElementById("status").innerHTML =
+        "Status: " + (data == 1 ? "ON" : "OFF");
+    });
+}, 2000);
+
+</script>
+
+</body>
+</html>
